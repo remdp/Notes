@@ -21,7 +21,17 @@ tools:context=".MainActivity">
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+    <TextView
+        android:id="@+id/title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:text="yaya"
+        android:textSize="@dimen/view_notes_item_title_text_size" />
+
+    </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.AppBarLayout>
 
