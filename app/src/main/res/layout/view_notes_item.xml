@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/view_notes_item_corner_radius"
     app:cardUseCompatPadding="true"
-    app:cardElevation="2dp"
+    app:cardElevation="@dimen/view_notes_card_elevation"
     app:contentPadding="@dimen/view_notes_item_padding"
     android:id="@+id/card_view"
     app:cardBackgroundColor="@color/colorGrey">

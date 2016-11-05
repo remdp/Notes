@@ -29,7 +29,10 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(recyclerView, R.string.action_settings, Snackbar.LENGTH_LONG).show();
                 return true;
             case R.id.action_help:
-                Snackbar.make(recyclerView, R.string.action_settings, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(recyclerView, R.string.action_help, Snackbar.LENGTH_LONG).show();
+                return true;
+            case R.id.action_options:
+                Snackbar.make(recyclerView, R.string.action_options, Snackbar.LENGTH_LONG).show();
                 return true;
         }
 
