@@ -7,8 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.notes.R;
+import com.example.notes.model.Note;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by maltsev on 02.11.2016.
@@ -16,10 +20,10 @@ import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
 
-    private List<String> dataSource = null;
+    private List<Note> mdataSource = null;
 
-    public void setDataSource(List<String> dataSource){
-        this.dataSource = dataSource;
+    public void setdataSource(List<Note> dataSource){
+        this.mdataSource = dataSource;
         notifyDataSetChanged();
     }
 
@@ -32,29 +36,39 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
     @Override
     public void onBindViewHolder(NotesAdapter.NotesViewHolder holder, int position) {
-        String title = dataSource.get(position);
-        holder.bindView(title);
+        Note note = mdataSource.get(position);
+        holder.bindView(note);
     }
 
     @Override
     public int getItemCount() {
-        if (dataSource == null){
+        if (mdataSource == null){
             return 0;
         }else {
-            return dataSource.size();
+            return mdataSource.size();
         }
     }
 
     static class NotesViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView titleTextView = null;
+        @BindView(R.id.primary_text_view)
+        protected TextView mPrimaryTextView;
+        @BindView(R.id.secondary_text_view)
+        protected TextView mSecondaryTextView;
+        @BindView(R.id.date_text_view)
+        protected TextView mDateTextView;
+
         public NotesViewHolder(View itemView) {
             super(itemView);
-            titleTextView = (TextView) itemView.findViewById(R.id.title_text_view);
+            //titleTextView = (TextView) itemView.findViewById(R.id.title_text_view);
+            ButterKnife.bind(this, itemView);
         }
 
-        void bindView(String title){
-            titleTextView.setText(title);
+        void bindView(Note note){
+           // titleTextView.setText(title);
+            mPrimaryTextView.setText(note.getTitle());
+            mSecondaryTextView.setText(note.getText());
+            mDateTextView.setText(String.valueOf(note.getTime()));
         }
     }
 

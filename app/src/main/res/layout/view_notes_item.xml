@@ -2,21 +2,30 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardElevation="@dimen/view_notes_item_card_elevation"
     app:cardCornerRadius="@dimen/view_notes_item_corner_radius"
     app:cardUseCompatPadding="true"
-    app:cardElevation="@dimen/view_notes_card_elevation"
     app:contentPadding="@dimen/view_notes_item_padding"
     android:id="@+id/card_view"
-    app:cardBackgroundColor="@color/colorGrey">
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/view_notes_item_height">
 
     <TextView
-        android:id="@+id/title_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:text="text"
-        android:textSize="@dimen/view_notes_item_title_text_size" />
+        tools:text="text"
+        style="@style/PrimaryTextViewStyle"
+        android:id="@+id/primary_text_view" />
+
+    <TextView
+        android:layout_gravity="bottom"
+        tools:text="text"
+        style="@style/SecondaryTextViewStyle"
+        android:id="@+id/secondary_text_view" />
+
+    <TextView
+        android:id="@+id/date_text_view"
+        android:layout_gravity="right"
+        tools:text="text"
+        style="@style/SecondaryTextViewStyle" />
 
 </android.support.v7.widget.CardView>

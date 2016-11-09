@@ -15,16 +15,22 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.notes.adapters.NotesAdapter;
+import com.example.notes.model.Note;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.notes.R.id.toolbar;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView = null;
-    private Toolbar toolbar = null;
+    @BindView(R.id.notes_recycler_view)
+    protected RecyclerView recyclerView;
+    @BindView(R.id.toolbar)
+    protected Toolbar toolbar;
+    //private RecyclerView recyclerView = null;
+    //private Toolbar toolbar = null;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -57,24 +63,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setTitle(R.string.app_name);
 
-        recyclerView = (RecyclerView) findViewById(R.id.notes_recycler_view);
+        //recyclerView = (RecyclerView) findViewById(R.id.notes_recycler_view);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
 
         NotesAdapter notesAdapter = new NotesAdapter();
-        List<String> dataSource = new ArrayList<>();
+        List<Note> dataSource = new ArrayList<>();
         for (int i = 0; i<100; i++){
-            dataSource.add("title: " + i);
+            Note note = new Note();
+            note.setTitle("title: " + i);
+            note.setText("text: " + i);
+            note.setTime(System.currentTimeMillis());
+            dataSource.add(note);
         }
 
         recyclerView.setAdapter(notesAdapter);
-        notesAdapter.setDataSource(dataSource);
+        notesAdapter.setdataSource(dataSource);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
