@@ -29,4 +29,7 @@
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
 
+    <style name="PrimaryColorAccentStyle">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
 </resources>

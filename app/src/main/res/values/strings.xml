@@ -6,4 +6,10 @@
     <string name="action_cat_male">Кот</string>
     <string name="action_cat_female">Кошка</string>
     <string name="action_kitten">Котёнок</string>
+
+    <string
+        formatted="false"
+        name="sharing_template">Title: %s\nText: %s
+    </string>
+
 </resources>

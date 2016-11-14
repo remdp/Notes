@@ -9,4 +9,5 @@
     <dimen name="view_notes_item_card_elevation">2dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="view_notes_item_height">72dp</dimen>
+    <dimen name="edit_note_field_margin">8dp</dimen>
 </resources>

@@ -30,7 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.notes.Activities.EditNoteActivity.DATA_KEY;
+import static com.example.notes.Activities.EditNoteActivity.DATA_SET;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-                intent.putExtra(DATA_KEY, EditNoteActivity.class.getSimpleName());
+                intent.putExtra(DATA_SET, EditNoteActivity.class.getSimpleName());
                 startActivity(intent);
             }
         });
