@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_edit_note"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.notes.Activities.EditNoteActivity">
 
-</RelativeLayout>
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:inputType="textPersonName"
+        android:text="New note"
+        android:ems="10"
+        tools:layout_editor_absoluteY="0dp"
+        android:id="@+id/noteTitle"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="16dp"
+        android:textSize="30dp"/>
+
+    <EditText
+        android:layout_width="352dp"
+        android:layout_height="472dp"
+        android:inputType="textMultiLine"
+        android:text="note"
+        android:gravity="top|left"
+        android:ems="10"
+        android:id="@+id/noteText"
+        app:layout_constraintRight_toRightOf="@+id/noteTitle"
+        app:layout_constraintTop_toBottomOf="@+id/noteTitle"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintLeft_toLeftOf="@+id/noteTitle"
+        android:singleLine="false"
+        android:selectAllOnFocus="false" />
+</android.support.constraint.ConstraintLayout>
