@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,27 +16,41 @@ import butterknife.ButterKnife;
 
 public class EditNoteActivity extends AppCompatActivity {
 
-    @BindView(R.id.noteText)
-    protected TextView noteText;
-    @BindView(R.id.noteTitle)
-    protected TextView noteTitle;
+    private static final String SHARE_TYPE = "text/plain";
+    public static final String RESULT = "RESULT";
 
-    public static void start(Context context){
-        Intent intent = new Intent(context, EditNoteActivity.class);
-    }
+    @BindView(R.id.contentEditText)
+    protected TextView noteText;
+    @BindView(R.id.titleEditText)
+    protected TextView noteTitle;
+    @BindView(R.id.toolbar)
+    protected Toolbar mToolbar;
+
+//    public static void start(Context context){
+//        Intent intent = new Intent(context, EditNoteActivity.class);
+//    }
 
     public static Intent newInstance(Context context){
         return new Intent(context, EditNoteActivity.class);
     }
 
-    public static final String DATA_SET = "DATA_SET";
+//    public static final String DATA_SET = "DATA_SET";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
-        String extraString = getIntent().getStringExtra(DATA_SET);
-        Toast.makeText(this, extraString, Toast.LENGTH_SHORT).show();
         ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        String extraString = getIntent().getStringExtra(DATA_SET);
+//        Toast.makeText(this, extraString, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.);
+        return super.onCreateOptionsMenu(menu);
     }
 }
