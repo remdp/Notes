@@ -1,13 +1,16 @@
 package com.example.notes.Activities;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.database.Cursor;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,10 +21,8 @@ import android.view.View;
 
 import com.example.notes.R;
 import com.example.notes.adapters.NotesAdapter;
+import com.example.notes.db.NotesContract;
 import com.example.notes.model.Note;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import butterknife.ButterKnife;
 
 //import static com.example.notes.Activities.EditNoteActivity.DATA_SET;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.notes_recycler_view)
     protected RecyclerView recyclerView;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
 
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
+        getSupportLoaderManager().initLoader(R.id.notes_loader, null, this);
 
         NotesAdapter notesAdapter = new NotesAdapter();
         List<Note> dataSource = new ArrayList<>();
@@ -96,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
             Note note = new Note();
             note.setTitle("title: " + i);
             note.setText("text: " + i);
-            note.setTime(System.currentTimeMillis());
+            note.setTime(String.valueOf(System.currentTimeMillis()));
             dataSource.add(note);
         }
 
         recyclerView.setAdapter(notesAdapter);
-        notesAdapter.setdataSource(dataSource);
+        notesAdapter.setDataSource(dataSource);
 
         // FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         mFabButton.setOnClickListener(new View.OnClickListener() {
@@ -123,4 +124,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(
+                this,
+                NotesContract.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+        List<Note> dataSource = new ArrayList<>();
+        while (data.moveToNext()) {
+            dataSource.add(new Note(data));
+        }
+        NotesAdapter adapter = new NotesAdapter();
+        recyclerView.setAdapter(adapter);
+        adapter.setDataSource(dataSource);
+    }
+
+    @Override
+    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+
+    }
 }
