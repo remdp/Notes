@@ -22,7 +22,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
     private List<Note> mdataSource = null;
 
-    public void setdataSource(List<Note> dataSource){
+    public void setDataSource(List<Note> dataSource){
         this.mdataSource = dataSource;
         notifyDataSetChanged();
     }
