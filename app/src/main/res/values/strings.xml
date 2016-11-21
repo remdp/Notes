@@ -12,5 +12,6 @@
         formatted="false"
         name="sharing_template">Title: %s\nText: %s</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
 
 </resources>

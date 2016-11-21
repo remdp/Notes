@@ -2,6 +2,7 @@ package com.example.notes.Activities;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -23,6 +24,9 @@ import com.example.notes.R;
 import com.example.notes.adapters.NotesAdapter;
 import com.example.notes.db.NotesContract;
 import com.example.notes.model.Note;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 //import static com.example.notes.Activities.EditNoteActivity.DATA_SET;
 
@@ -41,13 +46,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected Toolbar toolbar;
     @BindView(R.id.fab)
     protected FloatingActionButton mFabButton;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-    //private RecyclerView recyclerView = null;
-    //private Toolbar toolbar = null;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -93,34 +91,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         NotesAdapter notesAdapter = new NotesAdapter();
         List<Note> dataSource = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            Note note = new Note();
-            note.setTitle("title: " + i);
-            note.setText("text: " + i);
-            note.setTime(String.valueOf(System.currentTimeMillis()));
-            dataSource.add(note);
-        }
+//        for (int i = 0; i < 100; i++) {
+//            Note note = new Note();
+//            note.setTitle("title: " + i);
+//            note.setText("text: " + i);
+//            note.setTime(String.valueOf(System.currentTimeMillis()));
+//            dataSource.add(note);
+//        }
 
         recyclerView.setAdapter(notesAdapter);
         notesAdapter.setDataSource(dataSource);
 
         // FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        mFabButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-//                intent.putExtra(DATA_SET, EditNoteActivity.class.getSimpleName());
-                startActivity(intent);
-            }
-        });
+//        mFabButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
+//              //  intent.putExtra(DATA_SET, EditNoteActivity.class.getSimpleName());
+//                startActivity(intent);
+//               // startActivity(EditNoteActivity.newInstance(this));
+//
+//            }
+//        });
 
-        recyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Snackbar.make(recyclerView, "on touch listener", Snackbar.LENGTH_LONG).show();
-                return false;
-            }
-        });
+//        @OnClick(R.id.fab_button)
+//        public void onFabBtnClick() {
+//            startActivity(EditNoteActivity.newInstance(this));
+//        }
 
     }
 
@@ -141,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         List<Note> dataSource = new ArrayList<>();
         while (data.moveToNext()) {
             dataSource.add(new Note(data));
@@ -152,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
+    public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
 }
