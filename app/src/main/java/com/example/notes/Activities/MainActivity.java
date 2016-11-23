@@ -22,6 +22,7 @@ import android.view.View;
 
 import com.example.notes.R;
 import com.example.notes.adapters.NotesAdapter;
+import com.example.notes.adapters.NotesAdapter.NotesViewHolder;
 import com.example.notes.db.NotesContract;
 import com.example.notes.model.Note;
 import com.google.android.gms.appindexing.Action;
@@ -38,7 +39,7 @@ import butterknife.OnClick;
 
 //import static com.example.notes.Activities.EditNoteActivity.DATA_SET;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     @BindView(R.id.notes_recycler_view)
     protected RecyclerView recyclerView;
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return true;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         recyclerView.setLayoutManager(layoutManager);
         getSupportLoaderManager().initLoader(R.id.notes_loader, null, this);
 
-        NotesAdapter notesAdapter = new NotesAdapter();
-        List<Note> dataSource = new ArrayList<>();
+     //   NotesAdapter notesAdapter = new NotesAdapter();
+    //    List<Note> dataSource = new ArrayList<>();
 //        for (int i = 0; i < 100; i++) {
 //            Note note = new Note();
 //            note.setTitle("title: " + i);
@@ -99,26 +99,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //            dataSource.add(note);
 //        }
 
-        recyclerView.setAdapter(notesAdapter);
-        notesAdapter.setDataSource(dataSource);
+      //  recyclerView.setAdapter(notesAdapter);
+       // notesAdapter.setDataSource(dataSource);
 
-        // FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        mFabButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-//              //  intent.putExtra(DATA_SET, EditNoteActivity.class.getSimpleName());
-//                startActivity(intent);
-//               // startActivity(EditNoteActivity.newInstance(this));
-//
-//            }
-//        });
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
+                startActivity(intent);
+            }
+        };
+        mFabButton.setOnClickListener(onClickListener);
 
-//        @OnClick(R.id.fab_button)
+//        @OnClick(R.id.fab)
 //        public void onFabBtnClick() {
 //            startActivity(EditNoteActivity.newInstance(this));
 //        }
-
     }
 
     @Override
@@ -146,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         NotesAdapter adapter = new NotesAdapter();
         recyclerView.setAdapter(adapter);
         adapter.setDataSource(dataSource);
+        adapter.setOnItemClickListener(this);
     }
 
     @Override
@@ -153,4 +150,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
+    @Override
+    public void onClick(View view) {
+        NotesViewHolder holder = (NotesViewHolder) recyclerView.findContainingViewHolder(view);
+        if(holder==null) return;
+        startActivity(EditNoteActivity.newInstance(this, holder.getNote().getId()));
+    }
 }

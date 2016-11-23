@@ -11,10 +11,9 @@ import com.example.notes.db.NotesContract;
 public class Note {
 
     private String mTitle = null;
-
     private String mText = null;
-
     private String mTime = null;
+    private long mId;
 
     public Note() {}
 
@@ -46,5 +45,9 @@ public class Note {
 
     public void setTime(String time) {
         this.mTime = time;
+    }
+
+    public long getId(){
+        return mId;
     }
 }
