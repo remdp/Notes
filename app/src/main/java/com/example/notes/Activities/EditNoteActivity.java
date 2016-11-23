@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,10 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notes.R;
+import com.example.notes.adapters.NotesFragmentPagerAdapter;
 import com.example.notes.db.NotesContract;
 import com.example.notes.model.Note;
 import com.example.notes.util.DateUtil;
 import com.tjeannin.provigen.ProviGenBaseContract;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,14 +38,20 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
     private static final String SHARE_TYPE = "text/plain";
     public static final String RESULT = "RESULT";
 
-    @BindView(R.id.contentEditText)
-    protected TextView noteText;
-    @BindView(R.id.titleEditText)
-    protected TextView noteTitle;
+//    @BindView(R.id.contentEditText)
+//    protected TextView noteText;
+//    @BindView(R.id.titleEditText)
+//    protected TextView noteTitle;
+
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
+    @BindView(R.id.view_pager)
+    protected ViewPager mViewPager;
+
     private long mId = -1;
+
+    private NotesFragmentPagerAdapter mViewPagerAdapter = null;
 
     private String mOriginalTitle = "";
     private String mOriginalText = "";
@@ -68,6 +79,9 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        NotesFragmentPagerAdapter viewPagerAdapter = new NotesFragmentPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(viewPagerAdapter);
 //        String extraString = getIntent().getStringExtra(DATA_SET);
 //        Toast.makeText(this, extraString, Toast.LENGTH_SHORT).show();
 
@@ -96,7 +110,7 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
                 break;
             }
             case R.id.action_share: {
-                share();
+              //  share();
                 break;
             }
                 case R.id.action_delete: {
@@ -118,41 +132,42 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
         finish();
     }
 
-    private void share() {
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, prepareNoteForSharing());
-        shareIntent.setType(SHARE_TYPE);
-        startActivity(shareIntent);
-    }
+//    private void share() {
+//        Intent shareIntent = new Intent();
+//        shareIntent.setAction(Intent.ACTION_SEND);
+//        shareIntent.putExtra(Intent.EXTRA_TEXT, prepareNoteForSharing());
+//        shareIntent.setType(SHARE_TYPE);
+//        startActivity(shareIntent);
+//    }
 
-    private String prepareNoteForSharing() {
-        return getString(
-                R.string.sharing_template,
-                noteTitle.getText(),
-                noteText.getText());
-    }
+//    private String prepareNoteForSharing() {
+//        return getString(
+//                R.string.sharing_template,
+//                noteTitle.getText(),
+//                noteText.getText());
+//    }
 
 
-    @OnClick(R.id.saveBtn)
-    public void onSaveBtnClick() {
-        insertNote();
-        finish();
-    }
+//    @OnClick(R.id.saveBtn)
+//    public void onSaveBtnClick() {
+//        //insertNote();
+//        finish();
+//    }
 
-    private void insertNote() {
-        ContentValues values = new ContentValues();
-        values.put(NotesContract.TITLE_COLUMN, noteTitle.getText().toString());
-        values.put(NotesContract.TEXT_COLUMN, noteText.getText().toString());
-        values.put(NotesContract.TIME_COLUMN, String.valueOf(System.currentTimeMillis()));
-        getContentResolver().insert(NotesContract.CONTENT_URI, values);
-    }
+//    private void insertNote() {
+//        ContentValues values = new ContentValues();
+//        values.put(NotesContract.TITLE_COLUMN, noteTitle.getText().toString());
+//        values.put(NotesContract.TEXT_COLUMN, noteText.getText().toString());
+//        values.put(NotesContract.TIME_COLUMN, String.valueOf(System.currentTimeMillis()));
+//        getContentResolver().insert(NotesContract.CONTENT_URI, values);
+//    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(
                 this,
-                Uri.withAppendedPath(NotesContract.CONTENT_URI, String.valueOf(mId)),
+              //  Uri.withAppendedPath(NotesContract.CONTENT_URI, String.valueOf(mId)),
+                NotesContract.CONTENT_URI,
                 null,
                 null,
                 null,
@@ -162,11 +177,17 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor == null || !cursor.moveToFirst()) return;
-        Note note = new Note(cursor);
-        noteTitle.setText(note.getTitle());
-        noteText.setText(note.getText());
-        mOriginalTitle = note.getTitle();
-        mOriginalText = note.getText();
+        List<Note> dataSource = new ArrayList<>();
+        do {
+            dataSource.add(new Note(cursor));
+        } while (cursor.moveToNext());
+        mViewPagerAdapter.setDataSource(dataSource);
+
+       // Note note = new Note(cursor);
+        //noteTitle.setText(note.getTitle());
+        //noteText.setText(note.getText());
+      //  mOriginalTitle = note.getTitle();
+       // mOriginalText = note.getText();
     }
 
     @Override
@@ -179,20 +200,20 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
      //   safetyFinish(() -> EditNoteActivity.super.onBackPressed());
     }
 
-    private void safetyFinish(Runnable finish) {
-        if(mOriginalTitle.equals(noteTitle.getText().toString())
-                && mOriginalText.equals(noteText.getText().toString())) {
-            finish.run();
-            return;
-        }
-      //  showDoYouSureAlert(finish);
-    }
+//    private void safetyFinish(Runnable finish) {
+//        if(mOriginalTitle.equals(noteTitle.getText().toString())
+//                && mOriginalText.equals(noteText.getText().toString())) {
+//            finish.run();
+//            return;
+//        }
+//      //  showDoYouSureAlert(finish);
+//    }
 
     private void save() {
         if(isNoteUpdatable()) {
             updateNote();
         } else {
-            insertNote();
+      //      insertNote();
         }
     }
 
@@ -215,8 +236,8 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
 
     private void updateNote() {
         final ContentValues values = new ContentValues();
-        values.put(NotesContract.TITLE_COLUMN, noteTitle.getText().toString());
-        values.put(NotesContract.TEXT_COLUMN, noteText.getText().toString());
+//        values.put(NotesContract.TITLE_COLUMN, noteTitle.getText().toString());
+//        values.put(NotesContract.TEXT_COLUMN, noteText.getText().toString());
         values.put(NotesContract.TIME_COLUMN, DateUtil.formatCurrentDate());
         getContentResolver().update(
                 Uri.withAppendedPath(NotesContract.CONTENT_URI, String.valueOf(mId)),
@@ -224,5 +245,7 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
                 null,
                 null);
     }
+
+
 
 }
