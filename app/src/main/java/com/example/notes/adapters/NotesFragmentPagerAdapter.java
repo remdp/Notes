@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.notes.fragments.note_fragment;
+import com.example.notes.fragments.NoteFragment;
 import com.example.notes.model.Note;
 
 import java.util.List;
@@ -22,8 +22,8 @@ public class NotesFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        long id
-        return new note_fragment();
+        long id = mDataSource.get(position).getId();
+        return NoteFragment.newInstance(id);
     }
 
     @Override

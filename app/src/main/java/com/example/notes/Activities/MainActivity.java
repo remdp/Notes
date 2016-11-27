@@ -1,8 +1,8 @@
 package com.example.notes.Activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -25,9 +25,6 @@ import com.example.notes.adapters.NotesAdapter;
 import com.example.notes.adapters.NotesAdapter.NotesViewHolder;
 import com.example.notes.db.NotesContract;
 import com.example.notes.model.Note;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
@@ -45,8 +42,56 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected RecyclerView recyclerView;
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
-    @BindView(R.id.fab)
-    protected FloatingActionButton mFabButton;
+//    @BindView(R.id.fab)
+//    protected FloatingActionButton mFabButton;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+    //private RecyclerView recyclerView = null;
+    //private Toolbar toolbar = null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        setTitle(R.string.app_name);
+
+        //recyclerView = (RecyclerView) findViewById(R.id.notes_recycler_view);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+
+        recyclerView.setLayoutManager(layoutManager);
+        getSupportLoaderManager().initLoader(R.id.notes_loader, null, this);
+
+        for (int i = 0; i < 10; i++) {
+            ContentValues values = new ContentValues();
+            values.put(NotesContract.TEXT_COLUMN, "fddfdf" + i);
+            getContentResolver().insert(NotesContract.CONTENT_URI, values);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @OnClick(R.id.fab)
+         public void onFabBtnClick() {
+                 startActivity(EditNoteActivity.newInstance(this));
+             }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -66,61 +111,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        setTitle(R.string.app_name);
-
-        //recyclerView = (RecyclerView) findViewById(R.id.notes_recycler_view);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-
-        recyclerView.setLayoutManager(layoutManager);
-        getSupportLoaderManager().initLoader(R.id.notes_loader, null, this);
-
-     //   NotesAdapter notesAdapter = new NotesAdapter();
-    //    List<Note> dataSource = new ArrayList<>();
-//        for (int i = 0; i < 100; i++) {
-//            Note note = new Note();
-//            note.setTitle("title: " + i);
-//            note.setText("text: " + i);
-//            note.setTime(String.valueOf(System.currentTimeMillis()));
-//            dataSource.add(note);
-//        }
-
-      //  recyclerView.setAdapter(notesAdapter);
-       // notesAdapter.setDataSource(dataSource);
-
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
-                startActivity(intent);
-            }
-        };
-        mFabButton.setOnClickListener(onClickListener);
-
-//        @OnClick(R.id.fab)
-//        public void onFabBtnClick() {
-//            startActivity(EditNoteActivity.newInstance(this));
-//        }
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -134,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
         List<Note> dataSource = new ArrayList<>();
         while (data.moveToNext()) {
             dataSource.add(new Note(data));
@@ -146,14 +137,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
 
     }
 
     @Override
     public void onClick(View view) {
         NotesViewHolder holder = (NotesViewHolder) recyclerView.findContainingViewHolder(view);
-        if(holder==null) return;
+        if (holder == null) return;
         startActivity(EditNoteActivity.newInstance(this, holder.getNote().getId()));
     }
 }

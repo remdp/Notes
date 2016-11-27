@@ -197,17 +197,17 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
 
     @Override
     public void onBackPressed() {
-     //   safetyFinish(() -> EditNoteActivity.super.onBackPressed());
+        safetyFinish(EditNoteActivity.super::onBackPressed);
     }
 
-//    private void safetyFinish(Runnable finish) {
+    private void safetyFinish(Runnable runnable) {
 //        if(mOriginalTitle.equals(noteTitle.getText().toString())
 //                && mOriginalText.equals(noteText.getText().toString())) {
 //            finish.run();
 //            return;
 //        }
-//      //  showDoYouSureAlert(finish);
-//    }
+        showDoYouSureAlert(runnable);
+    }
 
     private void save() {
         if(isNoteUpdatable()) {
@@ -221,31 +221,29 @@ public class EditNoteActivity extends AppCompatActivity implements LoaderManager
         return mId != -1;
     }
 
-//    private void showDoYouSureAlert(final Runnable finish) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(R.string.do_you_sure_alert_title);
-//        builder.setMessage(R.string.do_yout_sure_alert_do_you_want_to_save_change);
-//        builder.setCancelable(false);
-//        builder.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
-//            save();
-//            finish.run();
-//        });
-//        builder.setNegativeButton(android.R.string.no, (dialogInterface, i) -> finish.run());
-//        builder.show();
-//    }
-
-    private void updateNote() {
-        final ContentValues values = new ContentValues();
-//        values.put(NotesContract.TITLE_COLUMN, noteTitle.getText().toString());
-//        values.put(NotesContract.TEXT_COLUMN, noteText.getText().toString());
-        values.put(NotesContract.TIME_COLUMN, DateUtil.formatCurrentDate());
-        getContentResolver().update(
-                Uri.withAppendedPath(NotesContract.CONTENT_URI, String.valueOf(mId)),
-                values,
-                null,
-                null);
+    private void showDoYouSureAlert(final Runnable finish) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.do_you_sure_alert_title);
+        builder.setMessage(R.string.do_yout_sure_alert_do_you_want_to_save_change);
+        builder.setCancelable(false);
+        builder.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+            save();
+            finish.run();
+        });
+        builder.setNegativeButton(android.R.string.no, (dialogInterface, i) -> finish.run());
+        builder.show();
     }
 
-
+    private void updateNote() {
+//        final ContentValues values = new ContentValues();
+////        values.put(NotesContract.TITLE_COLUMN, noteTitle.getText().toString());
+////        values.put(NotesContract.TEXT_COLUMN, noteText.getText().toString());
+//        values.put(NotesContract.TIME_COLUMN, DateUtil.formatCurrentDate());
+//        getContentResolver().update(
+//                Uri.withAppendedPath(NotesContract.CONTENT_URI, String.valueOf(mId)),
+//                values,
+//                null,
+//                null);
+    }
 
 }

@@ -20,11 +20,18 @@ import butterknife.ButterKnife;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
 
-    private List<Note> mdataSource = null;
+    private List<Note> mDataSource = null;
     private View.OnClickListener mOnItemClickListener = null;
 
+    public View.OnClickListener getOnItemClickListener() {
+        return mOnItemClickListener;
+    }
+
+    public void setOnItemClickListener(View.OnClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
     public void setDataSource(List<Note> dataSource){
-        this.mdataSource = dataSource;
+        this.mDataSource = dataSource;
         notifyDataSetChanged();
     }
 
@@ -37,24 +44,18 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
 
     @Override
     public void onBindViewHolder(NotesAdapter.NotesViewHolder holder, int position) {
-        Note note = mdataSource.get(position);
+        Note note = mDataSource.get(position);
         holder.bindView(note);
     }
 
     @Override
     public int getItemCount() {
-        if (mdataSource == null){
-            return 0;
-        }else {
-            return mdataSource.size();
-        }
-    }
-
-    public void setOnItemClickListener(View.OnClickListener onItemClickListener) {
-        this.mOnItemClickListener = onItemClickListener;
+        return mDataSource == null ? 0 : mDataSource.size();
     }
 
     public static class NotesViewHolder extends RecyclerView.ViewHolder{
+
+        private Note mNote;
 
         @BindView(R.id.primary_text_view)
         protected TextView mPrimaryTextView;
@@ -63,7 +64,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         @BindView(R.id.date_text_view)
         protected TextView mDateTextView;
 
-        private Note mNote;
+
 
         public NotesViewHolder(View itemView) {
             super(itemView);
@@ -83,7 +84,5 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             return mNote;
         }
 
-
     }
-
 }

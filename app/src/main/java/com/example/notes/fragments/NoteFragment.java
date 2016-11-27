@@ -11,25 +11,33 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.example.notes.R;
 import com.example.notes.db.NotesContract;
+import com.example.notes.model.Note;
 import com.tjeannin.provigen.ProviGenBaseContract;
 
 import butterknife.ButterKnife;
+import butterknife.BindView;
 
 /**
  * Created by java on 23.11.2016.
  */
 
-public class note_fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class NoteFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    @BindView(R.id.titleEditText)
+    protected EditText mTitleEditText;
+    @BindView(R.id.contentEditText)
+    protected EditText mContentEditText;
 
-    public static note_fragment newInstance() {
+    public static NoteFragment newInstance(long id) {
 
         Bundle args = new Bundle();
 
-        note_fragment fragment = new note_fragment();
+        args.putLong(ProviGenBaseContract._ID, id);
+        NoteFragment fragment = new NoteFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,7 +69,10 @@ public class note_fragment extends Fragment implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
+        if (cursor == null || !cursor.moveToFirst()) return;
+        Note note = new Note(cursor);
+        mTitleEditText.setText(note.getTitle());
+        mContentEditText.setText(note.getText());
     }
 
     @Override
